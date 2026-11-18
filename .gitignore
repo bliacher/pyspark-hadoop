@@ -1,0 +1,150 @@
+
+# ==========================================
+# Python
+# ==========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checking and linting
+.mypy_cache/
+.pyright/
+.ruff_cache/
+.pyre/
+
+# Python tools
+.python_history
+pip-wheel-metadata/
+
+# uv
+# Keep pyproject.toml and uv.lock tracked.
+# Keep .python-version tracked.
+
+# ==========================================
+# Jupyter Notebook
+# ==========================================
+
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# ==========================================
+# Apache Spark
+# ==========================================
+
+# Spark runtime
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Spark event logs
+events/
+spark-events/
+
+# Spark temporary files
+spark-temp/
+spark-tmp/
+blockmgr-*/
+spark-*/
+
+# Spark output and checkpoints
+output/
+checkpoints/
+checkpoint/
+
+# Spark logs
+*.log
+logs/
+
+# ==========================================
+# Hadoop / HDFS
+# ==========================================
+
+# Local Hadoop runtime data
+hadoop-data/
+hdfs-data/
+namenode-data/
+datanode-data/
+
+# Hadoop temporary files
+hadoop-tmp/
+*.crc
+
+# ==========================================
+# Docker
+# ==========================================
+
+# Local Docker overrides
+docker-compose.override.yml
+compose.override.yaml
+
+# Local environment variables
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Project runtime directories
+# ==========================================
+
+work/
+tmp/
+temp/
+cache/
+
+# Generated datasets
+data/output/
+data/processed/
+data/bronze/
+data/silver/
+data/gold/
+
+# Keep sample datasets in data/input/
+# Do not commit real patient data.
+
+# ==========================================
+# IDE / Editors
+# ==========================================
+
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# macOS
+# ==========================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==========================================
+# Windows
+# ==========================================
+
+Thumbs.db
+Desktop.ini
+

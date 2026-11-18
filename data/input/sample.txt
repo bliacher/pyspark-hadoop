@@ -1,0 +1,4 @@
+Apache Spark is fast
+Apache Spark is distributed
+Spark runs Python applications
+Python and Spark work together

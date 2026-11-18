@@ -1,0 +1,109 @@
+
+name: pyspark-hadoop
+
+x-spark-common: &spark-common
+  image: spark:4.0.1-python3
+  user: root
+  volumes:
+    - ./apps:/opt/spark/apps
+    - ./data:/opt/spark/data
+    - ./output:/opt/spark/output
+    - ./events:/opt/spark/events
+    - ./work:/opt/spark/work
+  networks:
+    - spark-network
+
+services:
+  spark-master:
+    <<: *spark-common
+    hostname: spark-master
+    command:
+      - /bin/bash
+      - -c
+      - |
+        exec /opt/spark/bin/spark-class \
+          org.apache.spark.deploy.master.Master \
+          --host spark-master \
+          --port 7077 \
+          --webui-port 8080
+    ports:
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:7077:7077"
+
+  spark-worker:
+    <<: *spark-common
+    hostname: spark-worker
+    depends_on:
+      - spark-master
+    command:
+      - /bin/bash
+      - -c
+      - |
+        exec /opt/spark/bin/spark-class \
+          org.apache.spark.deploy.worker.Worker \
+          --cores 2 \
+          --memory 2g \
+          --webui-port 8081 \
+          spark://spark-master:7077
+    ports:
+      - "127.0.0.1:8081:8081"
+
+  spark-client:
+    <<: *spark-common
+    hostname: spark-client
+    depends_on:
+      - spark-master
+      - spark-worker
+    command: ["/bin/bash", "-c", "sleep infinity"]
+    ports:
+      - "127.0.0.1:4040:4040"
+
+  namenode:
+    image: apache/hadoop:3.4.1
+    hostname: namenode
+    user: root
+    command:
+      - /bin/bash
+      - -c
+      - |
+        exec hdfs namenode
+    environment:
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./config/hadoop/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml:ro
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml:ro
+      - namenode-data:/hadoop/dfs/name
+    ports:
+      - "127.0.0.1:9870:9870"
+      - "127.0.0.1:8020:8020"
+    networks:
+      - spark-network
+
+  datanode:
+    image: apache/hadoop:3.4.1
+    hostname: datanode
+    user: root
+    command:
+      - /bin/bash
+      - -c
+      - |
+        exec hdfs datanode
+    environment:
+      HADOOP_CONF_DIR: /opt/hadoop/etc/hadoop
+    volumes:
+      - ./config/hadoop/core-site.xml:/opt/hadoop/etc/hadoop/core-site.xml:ro
+      - ./config/hadoop/hdfs-site.xml:/opt/hadoop/etc/hadoop/hdfs-site.xml:ro
+      - datanode-data:/hadoop/dfs/data
+    depends_on:
+      - namenode
+    networks:
+      - spark-network
+
+
+networks:
+  spark-network:
+    driver: bridge
+
+volumes:
+  namenode-data:
+  datanode-data:

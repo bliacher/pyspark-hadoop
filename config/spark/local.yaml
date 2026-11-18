@@ -1,0 +1,22 @@
+spark:
+  master: "local[*]"
+  deploy_mode: client
+
+  properties:
+    spark.sql.shuffle.partitions: 4
+    spark.driver.memory: 1g
+
+runtime:
+  mode: local
+  apps_dir: apps
+
+jobs:
+  word_count:
+    script: word_count/main.py
+    args:
+      - data/input/sample.txt
+  airports_app:
+    script: airports_app/main.py
+    args:
+      - data/input/airports.csv
+      - data/output/airport_lab02.parquet
